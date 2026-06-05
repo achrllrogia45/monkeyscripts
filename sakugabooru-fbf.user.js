@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Adds , and . hotkeys to Sakugabooru frame buttons
-// @author       You
+// @author       achrllrogia45
 // @match        https://*.sakugabooru.com/post/show/*
 // @grant        none
 // @updateURL    https://github.com/achrllrogia45/monkeyscripts/raw/main/sakugabooru-fbf.user.js
