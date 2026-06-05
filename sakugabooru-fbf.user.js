@@ -12,16 +12,28 @@
 
 (function() {
     'use strict';
+
+    // === CONFIGURATION ===
+    // Easily change the keys or button labels here!
+    const SHORTCUTS = {
+        // Pressing '.' clicks the button with text '1f >'
+        '.': '1f >',
+        // Pressing ',' clicks the button with text '< 1f'
+        ',': '< 1f'
+    };
+
     window.addEventListener('keydown', function(e) {
-        // Ignore shortcuts if you are typing in the search bar or tags section
+        // Ignore shortcuts if typing in input fields
         if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
 
-        if (e.key === '.') {
-            let btn = Array.from(document.querySelectorAll('button, a')).find(el => el.textContent.trim() === '1f >');
-            if (btn) btn.click();
-        }
-        if (e.key === ',') {
-            let btn = Array.from(document.querySelectorAll('button, a')).find(el => el.textContent.trim() === '< 1f');
+        // Check if the pressed key exists in our configuration
+        const targetButtonText = SHORTCUTS[e.key];
+
+        if (targetButtonText) {
+            // Find and click the button that matches the text
+            let btn = Array.from(document.querySelectorAll('button, a'))
+                .find(el => el.textContent.trim() === targetButtonText);
+
             if (btn) btn.click();
         }
     });
