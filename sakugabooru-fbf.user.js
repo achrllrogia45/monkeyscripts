@@ -6,6 +6,8 @@
 // @author       You
 // @match        https://*.sakugabooru.com/post/show/*
 // @grant        none
+// @updateURL    https://github.com/achrllrogia45/monkeyscripts/raw/main/sakugabooru-fbf.user.js
+// @downloadURL  https://github.com/achrllrogia45/monkeyscripts/raw/main/sakugabooru-fbf.user.js
 // ==/UserScript==
 
 (function() {
