@@ -1,2 +1,2 @@
 # monkeyscripts
-Manz - monkeytype scripts
+monkeytype scripts i dump in here
