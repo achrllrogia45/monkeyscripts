@@ -1,8 +1,8 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name         Sakugabooru Frame Shortcuts
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  Adds , and . hotkeys to Sakugabooru frame buttons
+// @description  Adds a/d frame hotkeys and Space play/pause on Sakugabooru videos
 // @author       achrllrogia45
 // @match        https://*.sakugabooru.com/post/show/*
 // @grant        none
@@ -14,27 +14,52 @@
     'use strict';
 
     // === CONFIGURATION ===
-    // Easily change the keys or button labels here!
+    // Easily change the keys, button text, or selectors here!
     const SHORTCUTS = {
-        // Pressing '.' clicks the button with text '1f >'
-        '.': '1f >',
-        // Pressing ',' clicks the button with text '< 1f'
-        ',': '< 1f'
+        // Pressing 'd' clicks the button with text '1f >'
+        'd': { type: 'text', target: '1f >' },
+        // Pressing 'a' clicks the button with text '< 1f'
+        'a': { type: 'text', target: '< 1f' },
+        // Pressing Space clicks the Video.js play/pause button
+        'Space': { type: 'selector', target: 'button.vjs-play-control' }
     };
+
+    function isTypingInField() {
+        const active = document.activeElement;
+        return active && (
+            active.tagName === 'INPUT' ||
+            active.tagName === 'TEXTAREA' ||
+            active.isContentEditable
+        );
+    }
+
+    function findShortcutButton(shortcut) {
+        if (shortcut.type === 'selector') {
+            return document.querySelector(shortcut.target);
+        }
+
+        if (shortcut.type === 'text') {
+            return Array.from(document.querySelectorAll('button, a'))
+                .find(el => el.textContent.trim() === shortcut.target);
+        }
+
+        return null;
+    }
 
     window.addEventListener('keydown', function(e) {
         // Ignore shortcuts if typing in input fields
-        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+        if (isTypingInField()) return;
 
-        // Check if the pressed key exists in our configuration
-        const targetButtonText = SHORTCUTS[e.key];
+        // Use e.code for special keys like Space, and e.key for normal letters.
+        const shortcut = SHORTCUTS[e.code] || SHORTCUTS[e.key.toLowerCase()];
 
-        if (targetButtonText) {
-            // Find and click the button that matches the text
-            let btn = Array.from(document.querySelectorAll('button, a'))
-                .find(el => el.textContent.trim() === targetButtonText);
+        if (!shortcut) return;
 
-            if (btn) btn.click();
-        }
-    });
+        // Stop the page/site from treating Space as a focused click/next-video shortcut.
+        e.preventDefault();
+        e.stopPropagation();
+
+        const btn = findShortcutButton(shortcut);
+        if (btn) btn.click();
+    }, true);
 })();
